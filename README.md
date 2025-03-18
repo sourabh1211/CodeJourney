@@ -1,7 +1,7 @@
 
 # CodeJourney 🚀
 
-![CodeJourney Dashboard]()
+![CodeJourney Dashboard](Website_img.png)
 
 CodeJourney is a powerful web application built with **React**, **Tailwind CSS**, and **APIs** to help competitive programmers track their progress across multiple coding platforms. The app fetches and displays real-time statistics from **LeetCode, Codeforces, and CodeChef**, providing users with a centralized dashboard for their coding achievements.
 
