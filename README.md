@@ -1,7 +1,7 @@
 
 # CodeJourney 🚀
 
-![CodeJourney Dashboard](https://github.com/sourabh1112/CodeJourney/raw/main/assets/dashboard.png)
+![CodeJourney Dashboard]()
 
 CodeJourney is a powerful web application built with **React**, **Tailwind CSS**, and **APIs** to help competitive programmers track their progress across multiple coding platforms. The app fetches and displays real-time statistics from **LeetCode, Codeforces, and CodeChef**, providing users with a centralized dashboard for their coding achievements.
 
@@ -23,7 +23,7 @@ CodeJourney is a powerful web application built with **React**, **Tailwind CSS**
 
 ## Deployment 🌍
 
-🚀 Live Demo: [CodeJourney](https://code-journey-sandy.vercel.app/)
+🚀 Live Demo: [CodeJourney](https://code-journey-sourabhs-projects-cc42ab20.vercel.app/)
 
 ## Installation & Setup ⚙️
 
