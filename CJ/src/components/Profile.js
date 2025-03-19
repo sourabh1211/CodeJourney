@@ -45,7 +45,7 @@ const Profile = () => {
     try {
       const response = await fetch(`https://codechef-api.vercel.app/handle/${username}`);
       const data = await response.json();
-      if (data.rating) {
+      if (data.currentRating) {
         setCodechefData(data);
         setError("");
         updateTimestamp();
@@ -60,9 +60,7 @@ const Profile = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-5">
       <div className="text-center mb-10">
-        <h1 className="text-5xl font-extrabold text-blue-400 drop-shadow-lg">
-          CodeJourney
-        </h1>
+        <h1 className="text-5xl font-extrabold text-blue-400 drop-shadow-lg">CodeJourney</h1>
         <p className="text-lg text-gray-300 mt-2">Track your coding stats effortlessly</p>
       </div>
 
@@ -91,21 +89,28 @@ const Profile = () => {
           </div>
         )}
         {codeforcesImageUrl && (
-          <div className="bg-gray-800 p-5 rounded-xl shadow-lg text-center border-2 border-white hover:bg-green-900 transition duration-300">
+          <div className="bg-gray-800 p-5 rounded-xl shadow-lg text-center border-2 border-white hover:bg-green-800 transition duration-300">
             <h3 className="text-xl font-semibold text-green-400">Codeforces Stats</h3>
             <img src={codeforcesImageUrl} alt="Codeforces Stats" className="w-full max-w-sm mx-auto mt-4 rounded-lg" />
             <p className="text-sm text-gray-400 mt-2">Last updated: {timestamp}</p>
           </div>
         )}
         {codechefData && (
-          <div className="bg-gray-800 p-5 rounded-xl shadow-lg text-center border-2 border-white hover:bg-amber-900 transition duration-300">
-            <h3 className="text-xl font-semibold text-amber-400">CodeChef Stats</h3>
-            <p className="text-lg mt-2">⭐ Rating: {codechefData.rating}</p>
+          <div className="bg-gray-800 p-5 rounded-xl shadow-lg text-center border-2 border-white hover:bg-orange-300 transition duration-300">
+          <div className="bg-black p-5 rounded-xl">
+            <h3 className="text-xl font-semibold text-white">CodeChef Stats</h3>
+            <img src={codechefData.profile} alt="CodeChef Profile" className="w-24 h-24 mx-auto rounded-full border-2 border-white mt-3" />
+            <p className="text-lg mt-2 font-bold">{codechefData.name}</p>
+            <p className="text-lg">⭐ Rating: {codechefData.currentRating}</p>
+            <p className="text-lg">📈 Highest Rating: {codechefData.highestRating}</p>
             <p className="text-lg">🔥 Stars: {codechefData.stars}</p>
-            <p className="text-lg">🏆 Global Rank: {codechefData.global_rank}</p>
-            <p className="text-lg">🌍 Country Rank: {codechefData.country_rank}</p>
+            <p className="text-lg">🏆 Global Rank: {codechefData.globalRank}</p>
+            <p className="text-lg">🌍 Country Rank: {codechefData.countryRank}</p>
+            <img src={codechefData.countryFlag} alt={codechefData.countryName} className="w-10 h-6 mt-2 mx-auto" />
             <p className="text-sm text-gray-400 mt-2">Last updated: {timestamp}</p>
           </div>
+        </div>
+        
         )}
       </div>
     </div>
