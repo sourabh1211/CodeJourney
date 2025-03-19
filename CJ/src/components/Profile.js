@@ -43,7 +43,7 @@ const Profile = () => {
       return;
     }
     try {
-      const response = await fetch(`https://codechef-api.vercel.app/${username}`);
+      const response = await fetch(`https://codechef-api.vercel.app/handle/${username}`);
       const data = await response.json();
       if (data.rating) {
         setCodechefData(data);
