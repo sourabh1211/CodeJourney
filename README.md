@@ -53,10 +53,6 @@ CodeJourney is a powerful web application built with **React**, **Tailwind CSS**
 
 Contributions are welcome! Feel free to submit issues or create pull requests to improve CodeJourney.
 
-## License 📜
-
-This project is licensed under the **MIT License**.
-
 ---
 
 🌟 Happy Coding! 🚀
