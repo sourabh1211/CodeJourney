@@ -110,11 +110,11 @@ const Profile = () => {
             <p className="text-sm text-gray-400 mt-2">Last updated: {timestamp}</p>
           </div>
         </div>
-        
         )}
       </div>
     </div>
   );
 };
+
 
 export default Profile;
