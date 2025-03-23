@@ -23,7 +23,7 @@ CodeJourney is a powerful web application built with **React**, **Tailwind CSS**
 
 ## Deployment 🌍
 
-🚀 Live Demo: [CodeJourney](https://code-journey-sourabhs-projects-cc42ab20.vercel.app/)
+🚀 Live Demo: [CodeJourney](https://code-journey-sourabh.vercel.app/)
 
 ## Installation & Setup ⚙️
 
