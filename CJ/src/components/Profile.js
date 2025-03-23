@@ -7,6 +7,7 @@ const Profile = () => {
   const [codechefData, setCodechefData] = useState(null);
   const [error, setError] = useState("");
   const [timestamp, setTimestamp] = useState("");
+  const [darkMode, setDarkMode] = useState(true);
   const [loading, setLoading] = useState({
     leetcode: false,
     codeforces: false,
@@ -27,7 +28,9 @@ const Profile = () => {
     if (!username) return showError("Please enter a LeetCode username");
     setLoading((prev) => ({ ...prev, leetcode: true }));
     setLeetCodeImageUrl(
-      `https://leetcard.jacoblin.cool/${username}?theme=dark&font=Ubuntu&cache=14400&ext=contest`
+      `https://leetcard.jacoblin.cool/${username}?theme=${
+        darkMode ? "dark" : "light"
+      }&font=Ubuntu&cache=14400&ext=contest`
     );
     updateTimestamp();
     setError("");
@@ -64,94 +67,157 @@ const Profile = () => {
     setLoading((prev) => ({ ...prev, codechef: false }));
   };
 
+  const toggleTheme = () => {
+    setDarkMode(!darkMode);
+    if (leetCodeImageUrl && username) {
+      setLeetCodeImageUrl(
+        `https://leetcard.jacoblin.cool/${username}?theme=${
+          !darkMode ? "dark" : "light"
+        }&font=Ubuntu&cache=14400&ext=contest`
+      );
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-5">
-      <div className="text-center mb-10">
-        <h1 className="text-5xl font-extrabold text-blue-400 drop-shadow-lg">CodeJourney</h1>
-        <p className="text-lg text-gray-300 mt-2">Track your coding stats effortlessly</p>
+    <div
+      className={`min-h-screen p-6 ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white"
+          : "bg-gradient-to-br from-gray-100 via-white to-gray-200 text-black"
+      } flex flex-col items-center`}
+    >
+      <div className="flex justify-between items-center w-full max-w-3xl mb-10">
+        <h1
+          className={`text-4xl sm:text-5xl font-extrabold ${
+            darkMode
+              ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 drop-shadow-lg"
+              : "text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-yellow-500 drop-shadow-md"
+          }`}
+        >
+          CodeJourney 🚀
+        </h1>
+        <button
+          className="text-black bg-yellow-400 hover:bg-yellow-300 px-4 py-2 rounded-full text-sm font-semibold shadow transition-transform duration-300 hover:scale-105"
+          onClick={toggleTheme}
+        >
+          {darkMode ? "🌞 Light Mode" : "🌙 Dark Mode"}
+        </button>
       </div>
 
-      <div className="bg-gray-800 bg-opacity-30 backdrop-blur-md p-6 rounded-xl shadow-lg w-full max-w-lg text-center border border-white/10">
+      <div
+        className={`${
+          darkMode
+            ? "bg-black bg-opacity-60 border-white/10 text-white"
+            : "bg-white bg-opacity-90 border-black/10 text-black"
+        } backdrop-blur-md p-6 rounded-2xl shadow-xl w-full max-w-2xl text-center border`}
+      >
         <input
           type="text"
-          placeholder="Enter your username"
+          placeholder="Enter Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full p-3 mb-4 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 mb-6 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-600"
         />
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <button
             onClick={fetchLeetCodeStats}
-            className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg transition"
+            className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105"
           >
             {loading.leetcode ? "Loading..." : "LeetCode"}
           </button>
           <button
             onClick={fetchCodeforcesStats}
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition"
+            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105"
           >
             {loading.codeforces ? "Loading..." : "Codeforces"}
           </button>
           <button
             onClick={fetchCodeChefStats}
-            className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg transition"
+            className="bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-300 hover:to-red-400 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105"
           >
             {loading.codechef ? "Loading..." : "CodeChef"}
           </button>
         </div>
-        {error && <p className="text-red-500 mt-3">{error}</p>}
+        {error && <p className="text-red-500 mt-4">{error}</p>}
+        {timestamp && <p className="text-sm mt-2 text-gray-400">Last updated: {timestamp}</p>}
       </div>
 
-      <div className="mt-8 flex flex-wrap justify-center gap-6">
-        {leetCodeImageUrl && (
-          <div className="bg-gray-800 p-5 rounded-xl shadow-lg text-center border-2 border-white hover:bg-cyan-900 transition duration-300">
-            <h3 className="text-xl font-semibold text-cyan-400">LeetCode Stats</h3>
-            <img
-              src={leetCodeImageUrl}
-              alt="LeetCode Stats"
-              className="w-full max-w-sm mx-auto mt-4 rounded-lg"
-            />
-            <p className="text-sm text-gray-400 mt-2">Last updated: {timestamp}</p>
-          </div>
-        )}
-
-        {codeforcesImageUrl && (
-          <div className="bg-gray-800 p-5 rounded-xl shadow-lg text-center border-2 border-white hover:bg-green-800 transition duration-300">
-            <h3 className="text-xl font-semibold text-green-400">Codeforces Stats</h3>
-            <img
-              src={codeforcesImageUrl}
-              alt="Codeforces Stats"
-              className="w-full max-w-sm mx-auto mt-4 rounded-lg"
-            />
-            <p className="text-sm text-gray-400 mt-2">Last updated: {timestamp}</p>
-          </div>
-        )}
-
-        {codechefData && (
-          <div className="bg-gray-800 p-5 rounded-xl shadow-lg text-center border-2 border-white hover:bg-orange-300 transition duration-300">
-            <div className="bg-black p-5 rounded-xl">
-              <h3 className="text-xl font-semibold text-white">CodeChef Stats</h3>
+      {(leetCodeImageUrl || codeforcesImageUrl || codechefData) && (
+        <div className="w-full max-w-5xl mt-10 grid sm:grid-cols-3 gap-6 text-center">
+          {leetCodeImageUrl && (
+            <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#f59e0b] hover:scale-105 transition duration-300">
               <img
-                src={codechefData.profile}
-                alt="CodeChef Profile"
-                className="w-24 h-24 mx-auto rounded-full border-2 border-white mt-3"
+                src={leetCodeImageUrl}
+                alt="LeetCode Stats"
+                className="h-full w-full object-contain"
               />
-              <p className="text-lg mt-2 font-bold">{codechefData.name}</p>
-              <p className="text-lg">⭐ Rating: {codechefData.currentRating}</p>
-              <p className="text-lg">📈 Highest Rating: {codechefData.highestRating}</p>
-              <p className="text-lg">🔥 Stars: {codechefData.stars}</p>
-              <p className="text-lg">🏆 Global Rank: {codechefData.globalRank}</p>
-              <p className="text-lg">🌍 Country Rank: {codechefData.countryRank}</p>
-              <img
-                src={codechefData.countryFlag}
-                alt={codechefData.countryName}
-                className="w-10 h-6 mt-2 mx-auto"
-              />
-              <p className="text-sm text-gray-400 mt-2">Last updated: {timestamp}</p>
+              <div className="absolute bottom-4 right-4">
+                <a
+                  href={`https://leetcode.com/${username}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+                >
+                  View Profile
+                </a>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+          {codeforcesImageUrl && (
+            <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#8b5cf6] hover:scale-105 transition duration-300">
+              <img
+                src={codeforcesImageUrl}
+                alt="Codeforces Stats"
+                className="h-full w-full object-contain"
+              />
+              <div className="absolute bottom-4 right-4">
+                <a
+                  href={`https://codeforces.com/profile/${username}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+                >
+                  View Profile
+                </a>
+              </div>
+            </div>
+          )}
+          {codechefData && (
+  <div className="relative min-h-[340px] rounded-xl overflow-hidden border bg-black p-4 text-white shadow-[0_0_25px_#f97316] hover:scale-105 transition duration-300 flex items-center justify-between">
+    <div className="flex items-center space-x-4">
+      <img
+        src={codechefData.profile}
+        alt="Profile"
+        className="w-20 h-20 rounded-full border-2 border-orange-400"
+      />
+      <div className="text-left space-y-2">
+      <h3 className="text-2xl font-bold text-amber-800 text-left">CodeChef Stats</h3>
+        <p className="text-lg font-bold">{codechefData.name}</p>
+        <p className="text-lg">⭐ {codechefData.stars} Rating: {codechefData.currentRating}</p>
+        <p className="text-lg">📈 Highest Rating: {codechefData.highestRating}</p>
+        <p className="text-lg">🌍 Global Rank: {codechefData.globalRank}</p>
+        <p className="text-lg">🏆 Country Rank: {codechefData.countryRank}</p>
+        <div className="flex items-center space-x-2">
+          <img src={codechefData.countryFlag} alt="Country Flag" className="w-6 h-4" />
+          <span className="text-sm">{codechefData.countryName}</span>
+        </div>
       </div>
+    </div>
+    <div className="absolute bottom-4 right-4">
+      <a
+        href={`https://www.codechef.com/users/${codechefData.name}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+      >
+        View Profile
+      </a>
+    </div>
+  </div>
+)}
+
+        </div>
+      )}
     </div>
   );
 };
