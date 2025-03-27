@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 const Profile = () => {
   const [username, setUsername] = useState("");
   const [leetCodeImageUrl, setLeetCodeImageUrl] = useState("");
@@ -193,10 +192,10 @@ const Profile = () => {
       <div className="text-left space-y-2">
       <h3 className="text-2xl font-bold text-amber-800 text-left">CodeChef Stats</h3>
         <p className="text-lg font-bold">{codechefData.name}</p>
-        <p className="text-lg">⭐ {codechefData.stars} Rating: {codechefData.currentRating}</p>
-        <p className="text-lg">📈 Highest Rating: {codechefData.highestRating}</p>
-        <p className="text-lg">🌍 Global Rank: {codechefData.globalRank}</p>
-        <p className="text-lg">🏆 Country Rank: {codechefData.countryRank}</p>
+        <p className="text-lg">⭐{codechefData.stars}Rating:{codechefData.currentRating}</p>
+        <p className="text-lg">📈Highest Rating:{codechefData.highestRating}</p>
+        <p className="text-lg">🌍Global Rank:{codechefData.globalRank}</p>
+        <p className="text-lg">🏆Country Rank:{codechefData.countryRank}</p>
         <div className="flex items-center space-x-2">
           <img src={codechefData.countryFlag} alt="Country Flag" className="w-6 h-4" />
           <span className="text-sm">{codechefData.countryName}</span>
@@ -204,7 +203,7 @@ const Profile = () => {
       </div>
     </div>
     <div className="absolute bottom-4 right-4">
-      <a
+      <a 
         href={`https://www.codechef.com/users/${username}`}
         target="_blank"
         rel="noopener noreferrer"
@@ -215,11 +214,9 @@ const Profile = () => {
     </div>
   </div>
 )}
-
-        </div>
+  </div>
       )}
     </div>
   );
 };
-
 export default Profile;
