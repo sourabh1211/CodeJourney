@@ -33,7 +33,6 @@ const Profile = () => {
       }&font=Ubuntu&cache=14400&ext=contest`
     );
     updateTimestamp();
-    setError("");
     setTimeout(() => setLoading((prev) => ({ ...prev, leetcode: false })), 1000);
   };
 
@@ -44,7 +43,6 @@ const Profile = () => {
       `https://codeforces-readme-stats.vercel.app/api/card?username=${username}`
     );
     updateTimestamp();
-    setError("");
     setTimeout(() => setLoading((prev) => ({ ...prev, codeforces: false })), 1000);
   };
 
@@ -80,14 +78,16 @@ const Profile = () => {
 
   return (
     <div
-      className={`min-h-screen w-full grid grid-cols-1 md:grid-cols-10 transition-colors duration-500 ${
-        darkMode
-          ? "bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white"
-          : "bg-gradient-to-br from-gray-100 via-white to-gray-200 text-black"
+      className={`min-h-screen w-full flex flex-col md:flex-row transition-colors duration-500 overflow-hidden ${
+        darkMode ? "bg-black text-white" : "bg-white text-black"
       }`}
     >
       {/* LEFT SIDE */}
-      <div className="md:col-span-3 p-6 flex flex-col items-center gap-8 border-r border-gray-500 shadow-xl transition-all duration-300">
+      <div
+        className={`w-full md:w-[30%] p-6 flex flex-col items-center gap-6 shadow-xl transition-all duration-300 ${
+          darkMode ? "bg-gray-800" : "bg-white/90"
+        }`}
+      >
         <h1
           className={`text-4xl font-extrabold text-center transition-all duration-500 ${
             darkMode
@@ -114,47 +114,54 @@ const Profile = () => {
           placeholder="Enter Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full max-w-sm p-3 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full p-3 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
-        <div className="flex flex-col gap-4 w-full max-w-sm">
+        <div className="flex flex-col gap-4 w-full">
           <button
             onClick={fetchLeetCodeStats}
-            className="bg-yellow-500 hover:bg-yellow-400 text-white py-2 px-4 rounded-full shadow-md"
+            className="bg-yellow-500 hover:bg-yellow-400 text-white py-2 px-4 rounded-full shadow"
           >
             {loading.leetcode ? "Loading..." : "LeetCode"}
           </button>
           <button
             onClick={fetchCodeforcesStats}
-            className="bg-blue-500 hover:bg-blue-400 text-white py-2 px-4 rounded-full shadow-md"
+            className="bg-blue-500 hover:bg-blue-400 text-white py-2 px-4 rounded-full shadow"
           >
             {loading.codeforces ? "Loading..." : "Codeforces"}
           </button>
           <button
             onClick={fetchCodeChefStats}
-            className="bg-red-500 hover:bg-red-400 text-white py-2 px-4 rounded-full shadow-md"
+            className="bg-red-500 hover:bg-red-400 text-white py-2 px-4 rounded-full shadow"
           >
             {loading.codechef ? "Loading..." : "CodeChef"}
           </button>
         </div>
 
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 text-sm">{error}</p>}
         {timestamp && <p className="text-sm text-gray-400">Last updated: {timestamp}</p>}
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="md:col-span-7 p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 place-items-center">
+      <div
+        className={`w-full md:w-[70%] p-6 grid gap-6 grid-cols-1 md:grid-cols-3 transition-all duration-500 ${
+          darkMode ? "bg-black" : "bg-white"
+        }`}
+        style={{ minHeight: "100vh" }}
+      >
         {leetCodeImageUrl && (
-          <div className="lg:col-span-2 relative rounded-xl overflow-hidden border bg-black p-2 shadow-xl transition-transform duration-300 hover:scale-105 w-full max-w-[700px]">
+          <div className="md:col-span-2 rounded-xl overflow-hidden border bg-black p-2 shadow-xl transition-transform duration-300 hover:scale-105 w-full h-full">
             <img
               src={leetCodeImageUrl}
               alt="LeetCode Stats"
               className="h-full w-full object-contain"
             />
-            <div className="absolute bottom-4 right-4">
+            <div className="mt-2 text-right">
               <a
                 href={`https://leetcode.com/${username}`}
-                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
               >
                 View Profile
               </a>
@@ -163,16 +170,18 @@ const Profile = () => {
         )}
 
         {codeforcesImageUrl && (
-          <div className="relative rounded-xl overflow-hidden border bg-black p-2 shadow-xl transition-transform duration-300 hover:scale-105 w-full max-w-[500px]">
+          <div className="rounded-xl overflow-hidden border bg-black p-2 shadow-xl transition-transform duration-300 hover:scale-105 w-full h-full">
             <img
               src={codeforcesImageUrl}
               alt="Codeforces Stats"
               className="h-full w-full object-contain"
             />
-            <div className="absolute bottom-4 right-4">
+            <div className="mt-2 text-right">
               <a
                 href={`https://codeforces.com/profile/${username}`}
-                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
               >
                 View Profile
               </a>
@@ -181,28 +190,31 @@ const Profile = () => {
         )}
 
         {codechefData && (
-          <div className="relative rounded-xl overflow-hidden border bg-black p-4 text-white shadow-xl transition-transform duration-300 hover:scale-105 w-full max-w-[500px] flex flex-col gap-4">
-            <div className="flex items-center gap-4">
-              <img
-                src={codechefData.profile}
-                alt="Profile"
-                className="w-20 h-20 rounded-full border-2 border-orange-400"
-              />
-              <div>
-                <h3 className="text-xl font-bold">{codechefData.name}</h3>
-                <p className="text-sm text-gray-300">{codechefData.institution}</p>
+          <div className="rounded-xl overflow-hidden border bg-black p-4 text-white shadow-xl transition-transform duration-300 hover:scale-105 w-full h-full flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-4">
+                <img
+                  src={codechefData.profile}
+                  alt="Profile"
+                  className="w-20 h-20 rounded-full border-2 border-orange-400"
+                />
+                <div>
+                  <h3 className="text-xl font-bold">{codechefData.name}</h3>
+                  <p className="text-sm text-gray-300">{codechefData.institution}</p>
+                </div>
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <p><strong>Rating:</strong> {codechefData.currentRating}</p>
-              <p><strong>Stars:</strong> {codechefData.stars}</p>
-              <p><strong>Max Rating:</strong> {codechefData.highestRating}</p>
-              <p><strong>Global Rank:</strong> {codechefData.globalRank}</p>
-              <p><strong>Country Rank:</strong> {codechefData.countryRank}</p>
+              <div className="grid grid-cols-2 gap-3 text-sm mt-4">
+                <p><strong>Rating:</strong> {codechefData.currentRating}</p>
+                <p><strong>Stars:</strong> {codechefData.stars}</p>
+                <p><strong>Highest:</strong> {codechefData.highestRating}</p>
+                <p><strong>Rank:</strong> {codechefData.countryRank}</p>
+              </div>
             </div>
             <a
               href={`https://www.codechef.com/users/${username}`}
-              className="self-end bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="self-end mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
             >
               View Profile
             </a>
