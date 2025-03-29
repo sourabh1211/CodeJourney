@@ -139,9 +139,7 @@ const Profile = () => {
           {timestamp && <p className="text-sm mt-2 text-gray-400">Last updated: {timestamp}</p>}
         </div>
 
-        {/* RIGHT SIDE */}
         <div className="relative">
-          {/* Vertical Line */}
           <div className="hidden lg:block absolute left-0 top-0 h-full w-px bg-gray-400/30" />
 
           <div className="flex flex-col gap-6 pl-0 lg:pl-10">
@@ -161,44 +159,46 @@ const Profile = () => {
                 </div>
               )}
               {codechefData && (
-                <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-4 text-white hover:scale-105 transition duration-300">
-                  <div className="flex items-center space-x-4">
-                    <img
-                      src={codechefData.profile}
-                      alt="Profile"
-                      className="w-16 h-16 rounded-full border-2 border-orange-400"
-                    />
-                    <div>
-                      <h3 className="text-xl font-bold text-amber-500">CodeChef</h3>
-                      <p className="text-md font-semibold">{codechefData.name}</p>
-                      <p>⭐ {codechefData.stars} Rating: {codechefData.currentRating}</p>
-                      <p>📈 Highest: {codechefData.highestRating}</p>
-                      <p>🌍 Global: {codechefData.globalRank}</p>
-                      <p>🏆 Country: {codechefData.countryRank}</p>
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center mt-3">
-                    <div className="flex items-center space-x-2">
-                      <img
-                        src={codechefData.countryFlag}
-                        alt="Flag"
-                        className="w-6 h-4"
-                      />
-                      <span className="text-sm">{codechefData.countryName}</span>
-                    </div>
-                    <a
-                      href={`https://www.codechef.com/users/${username}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block bg-green-500 hover:bg-green-600 text-white text-center py-2 px-4 rounded-md"
-                    >
-                      View CodeChef
-                    </a>
-                  </div>
-                </div>
-              )}
+  <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-4 text-white hover:scale-105 transition duration-300">
+    <div className="flex items-center space-x-4">
+      <img
+        src={codechefData.profile}
+        alt="Profile"
+        className="w-16 h-16 rounded-full border-2 border-orange-400"
+      />
+      <div>
+        <h3 className="text-xl font-bold text-amber-500">CodeChef</h3>
+        <p className="text-md font-semibold">{codechefData.name}</p>
+        <p>⭐ {codechefData.stars} Rating: {codechefData.currentRating}</p>
+        <p>📈 Highest: {codechefData.highestRating}</p>
+        <p>🌍 Global: {codechefData.globalRank}</p>
+        <p>🏆 Country: {codechefData.countryRank}</p>
+      </div>
+    </div>
+    <div className="flex justify-between items-center mt-3">
+      <div className="flex items-center space-x-2">
+        <img
+          src={codechefData.countryFlag}
+          alt="Flag"
+          className="w-6 h-4"
+        />
+        <span className="text-sm">{codechefData.countryName}</span>
+      </div>
+    </div>
+    <button
+      onClick={() => {
+        window.open(`https://www.codechef.com/users/${username}`, "_blank");
+        setUsername(username); // update input if changed elsewhere
+        fetchCodeChefStats(); // ensure profile data is re-fetched
+      }}
+      className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white text-center py-2 px-4 rounded-md"
+    >
+      View CodeChef
+    </button>
+  </div>
+)}
+
             </div>
-            {/* Bottom: LeetCode */}
             {leetCodeImageUrl && (
               <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-4 hover:scale-105 transition duration-300">
                 <img src={leetCodeImageUrl} alt="LeetCode Stats" className="w-full" />
