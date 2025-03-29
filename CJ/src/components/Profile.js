@@ -158,47 +158,40 @@ const Profile = () => {
                   </a>
                 </div>
               )}
-              {codechefData && (
-  <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-4 text-white hover:scale-105 transition duration-300">
+             {codechefData && (
+  <div className="relative min-h-[340px] rounded-xl overflow-hidden border bg-black p-4 text-white shadow-[0_0_25px_#f97316] hover:scale-105 transition duration-300 flex items-center justify-between">
     <div className="flex items-center space-x-4">
       <img
         src={codechefData.profile}
         alt="Profile"
-        className="w-16 h-16 rounded-full border-2 border-orange-400"
+        className="w-20 h-20 rounded-full border-2 border-orange-400"
       />
-      <div>
-        <h3 className="text-xl font-bold text-amber-500">CodeChef</h3>
-        <p className="text-md font-semibold">{codechefData.name}</p>
-        <p>⭐ {codechefData.stars} Rating: {codechefData.currentRating}</p>
-        <p>📈 Highest: {codechefData.highestRating}</p>
-        <p>🌍 Global: {codechefData.globalRank}</p>
-        <p>🏆 Country: {codechefData.countryRank}</p>
+      <div className="text-left space-y-2">
+      <h3 className="text-2xl font-bold text-amber-800 text-left">CodeChef Stats</h3>
+        <p className="text-lg font-bold">{codechefData.name}</p>
+        <p className="text-lg">⭐{codechefData.stars}Rating:{codechefData.currentRating}</p>
+        <p className="text-lg">📈Highest Rating:{codechefData.highestRating}</p>
+        <p className="text-lg">🌍Global Rank:{codechefData.globalRank}</p>
+        <p className="text-lg">🏆Country Rank:{codechefData.countryRank}</p>
+        <div className="flex items-center space-x-2">
+          <img src={codechefData.countryFlag} alt="Country Flag" className="w-6 h-4" />
+          <span className="text-sm">{codechefData.countryName}</span>
+        </div>
       </div>
     </div>
-    <div className="flex justify-between items-center mt-3">
-      <div className="flex items-center space-x-2">
-        <img
-          src={codechefData.countryFlag}
-          alt="Flag"
-          className="w-6 h-4"
-        />
-        <span className="text-sm">{codechefData.countryName}</span>
-      </div>
+    <div className="absolute bottom-4 right-4">
+      <a 
+        href={`https://www.codechef.com/users/${username}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+      >
+        View Profile
+      </a>
     </div>
-    <button
-      onClick={() => {
-        window.open(`https://www.codechef.com/users/${username}`, "_blank");
-        setUsername(username); // update input if changed elsewhere
-        fetchCodeChefStats(); // ensure profile data is re-fetched
-      }}
-      className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white text-center py-2 px-4 rounded-md"
-    >
-      View CodeChef
-    </button>
   </div>
 )}
-
-            </div>
+  </div>
             {leetCodeImageUrl && (
               <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-4 hover:scale-105 transition duration-300">
                 <img src={leetCodeImageUrl} alt="LeetCode Stats" className="w-full" />
