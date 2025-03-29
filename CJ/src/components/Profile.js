@@ -1,10 +1,11 @@
-
 import React, { useState } from "react";
+
 const Profile = () => {
   const [username, setUsername] = useState("");
   const [leetCodeImageUrl, setLeetCodeImageUrl] = useState("");
   const [codeforcesImageUrl, setCodeforcesImageUrl] = useState("");
   const [codechefData, setCodechefData] = useState(null);
+  const [gfgData, setGfgData] = useState(null);
   const [error, setError] = useState("");
   const [timestamp, setTimestamp] = useState("");
   const [darkMode, setDarkMode] = useState(true);
@@ -12,6 +13,7 @@ const Profile = () => {
     leetcode: false,
     codeforces: false,
     codechef: false,
+    gfg: false,
   });
 
   const updateTimestamp = () => {
@@ -67,6 +69,25 @@ const Profile = () => {
     setLoading((prev) => ({ ...prev, codechef: false }));
   };
 
+  const fetchGfgStats = async () => {
+    if (!username) return showError("Please enter a GFG username");
+    setLoading((prev) => ({ ...prev, gfg: true }));
+    try {
+      const res = await fetch(`https://gfg-profile-api.vercel.app/api/gfg?username=${username}`);
+      const data = await res.json();
+      if (data.name) {
+        setGfgData(data);
+        updateTimestamp();
+        setError("");
+      } else {
+        showError("GFG username not found.");
+      }
+    } catch {
+      showError("Failed to fetch GFG stats.");
+    }
+    setLoading((prev) => ({ ...prev, gfg: false }));
+  };
+
   const toggleTheme = () => {
     setDarkMode(!darkMode);
     if (leetCodeImageUrl && username) {
@@ -118,7 +139,7 @@ const Profile = () => {
           onChange={(e) => setUsername(e.target.value)}
           className="w-full p-3 mb-6 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-600"
         />
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <button
             onClick={fetchLeetCodeStats}
             className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105"
@@ -137,13 +158,19 @@ const Profile = () => {
           >
             {loading.codechef ? "Loading..." : "CodeChef"}
           </button>
+          <button
+            onClick={fetchGfgStats}
+            className="bg-gradient-to-r from-green-400 to-green-600 hover:from-green-300 hover:to-green-500 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105"
+          >
+            {loading.gfg ? "Loading..." : "GFG"}
+          </button>
         </div>
         {error && <p className="text-red-500 mt-4">{error}</p>}
         {timestamp && <p className="text-sm mt-2 text-gray-400">Last updated: {timestamp}</p>}
       </div>
 
-      {(leetCodeImageUrl || codeforcesImageUrl || codechefData) && (
-        <div className="w-full max-w-5xl mt-10 grid sm:grid-cols-3 gap-6 text-center">
+      {(leetCodeImageUrl || codeforcesImageUrl || codechefData || gfgData) && (
+        <div className="w-full max-w-5xl mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
           {leetCodeImageUrl && (
             <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#f59e0b] hover:scale-105 transition duration-300">
               <img
@@ -175,7 +202,7 @@ const Profile = () => {
                   href={`https://codeforces.com/profile/${username}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
                 >
                   View Profile
                 </a>
@@ -183,41 +210,44 @@ const Profile = () => {
             </div>
           )}
           {codechefData && (
-  <div className="relative min-h-[340px] rounded-xl overflow-hidden border bg-black p-4 text-white shadow-[0_0_25px_#f97316] hover:scale-105 transition duration-300 flex items-center justify-between">
-    <div className="flex items-center space-x-4">
-      <img
-        src={codechefData.profile}
-        alt="Profile"
-        className="w-20 h-20 rounded-full border-2 border-orange-400"
-      />
-      <div className="text-left space-y-2">
-      <h3 className="text-2xl font-bold text-amber-800 text-left">CodeChef Stats</h3>
-        <p className="text-lg font-bold">{codechefData.name}</p>
-        <p className="text-lg">⭐{codechefData.stars}Rating:{codechefData.currentRating}</p>
-        <p className="text-lg">📈Highest Rating:{codechefData.highestRating}</p>
-        <p className="text-lg">🌍Global Rank:{codechefData.globalRank}</p>
-        <p className="text-lg">🏆Country Rank:{codechefData.countryRank}</p>
-        <div className="flex items-center space-x-2">
-          <img src={codechefData.countryFlag} alt="Country Flag" className="w-6 h-4" />
-          <span className="text-sm">{codechefData.countryName}</span>
+            <div className="rounded-xl p-4 border bg-gradient-to-br from-orange-200 to-red-300 text-black shadow-lg hover:scale-105 transition duration-300">
+              <h2 className="text-xl font-bold mb-2">CodeChef Profile</h2>
+              <p><strong>Username:</strong> {codechefData.username}</p>
+              <p><strong>Rating:</strong> {codechefData.currentRating}</p>
+              <p><strong>Stars:</strong> {codechefData.stars}</p>
+              <p><strong>Global Rank:</strong> {codechefData.globalRank}</p>
+              <p><strong>Country Rank:</strong> {codechefData.countryRank}</p>
+              <a
+                href={`https://www.codechef.com/users/${username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-4 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full transition-transform duration-300 hover:scale-105"
+              >
+                View Profile
+              </a>
+            </div>
+          )}
+          {gfgData && (
+            <div className="rounded-xl p-4 border bg-gradient-to-br from-green-200 to-green-400 text-black shadow-lg hover:scale-105 transition duration-300">
+              <h2 className="text-xl font-bold mb-2">GFG Profile</h2>
+              <p><strong>Name:</strong> {gfgData.name}</p>
+              <p><strong>Rank:</strong> {gfgData.rank}</p>
+              <p><strong>Score:</strong> {gfgData.score}</p>
+              <p><strong>Institute:</strong> {gfgData.institute}</p>
+              <a
+                href={`https://auth.geeksforgeeks.org/user/${username}/`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full transition-transform duration-300 hover:scale-105"
+              >
+                View Profile
+              </a>
+            </div>
+          )}
         </div>
-      </div>
-    </div>
-    <div className="absolute bottom-4 right-4">
-      <a 
-        href={`https://www.codechef.com/users/${username}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-      >
-        View Profile
-      </a>
-    </div>
-  </div>
-)}
-  </div>
       )}
     </div>
   );
 };
+
 export default Profile;
