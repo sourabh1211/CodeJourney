@@ -182,7 +182,7 @@ const Profile = () => {
               </div>
             </div>
           )}
-          {codechefData && (
+         {codechefData && (
   <div className="relative min-h-[340px] rounded-xl overflow-hidden border bg-black p-4 text-white shadow-[0_0_25px_#f97316] hover:scale-105 transition duration-300 flex items-center justify-between">
     <div className="flex items-center space-x-4">
       <img
@@ -191,12 +191,12 @@ const Profile = () => {
         className="w-20 h-20 rounded-full border-2 border-orange-400"
       />
       <div className="text-left space-y-2">
-      <h3 className="text-2xl font-bold text-amber-800 text-left">CodeChef Stats</h3>
+        <h3 className="text-2xl font-bold text-amber-800 text-left">CodeChef Stats</h3>
         <p className="text-lg font-bold">{codechefData.name}</p>
-        <p className="text-lg">⭐{codechefData.stars}Rating:{codechefData.currentRating}</p>
-        <p className="text-lg">📈Highest Rating:{codechefData.highestRating}</p>
-        <p className="text-lg">🌍Global Rank:{codechefData.globalRank}</p>
-        <p className="text-lg">🏆Country Rank:{codechefData.countryRank}</p>
+        <p className="text-lg">⭐{codechefData.stars} Rating: {codechefData.currentRating}</p>
+        <p className="text-lg">📈 Highest Rating: {codechefData.highestRating}</p>
+        <p className="text-lg">🌍 Global Rank: {codechefData.globalRank}</p>
+        <p className="text-lg">🏆 Country Rank: {codechefData.countryRank}</p>
         <div className="flex items-center space-x-2">
           <img src={codechefData.countryFlag} alt="Country Flag" className="w-6 h-4" />
           <span className="text-sm">{codechefData.countryName}</span>
@@ -204,7 +204,7 @@ const Profile = () => {
       </div>
     </div>
     <div className="absolute bottom-4 right-4">
-      <a 
+      <a
         href={`https://www.codechef.com/users/${username}`}
         target="_blank"
         rel="noopener noreferrer"
@@ -215,6 +215,7 @@ const Profile = () => {
     </div>
   </div>
 )}
+
   </div>
       )}
     </div>
