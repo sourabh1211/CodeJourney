@@ -98,7 +98,7 @@ const Profile = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-10">
         {/* LEFT SIDE */}
         <div
           className={`p-8 rounded-2xl shadow-2xl border transition duration-500 ${
@@ -110,7 +110,7 @@ const Profile = () => {
           <h2 className="text-2xl font-bold mb-6">Enter Your Username</h2>
           <input
             type="text"
-            placeholder="e.g. johndoe"
+            placeholder="Enter Your Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="w-full p-3 rounded-full mb-6 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -140,66 +140,79 @@ const Profile = () => {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="flex flex-col gap-6">
-          {/* Top: Codeforces + CodeChef */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {codeforcesImageUrl && (
-              <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-3 hover:scale-105 transition duration-300">
-                <img src={codeforcesImageUrl} alt="Codeforces Stats" className="w-full h-64 object-contain" />
+        <div className="relative">
+          {/* Vertical Line */}
+          <div className="hidden lg:block absolute left-0 top-0 h-full w-px bg-gray-400/30" />
+
+          <div className="flex flex-col gap-6 pl-0 lg:pl-10">
+            {/* Top: Codeforces + CodeChef */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {codeforcesImageUrl && (
+                <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-3 hover:scale-105 transition duration-300">
+                  <img src={codeforcesImageUrl} alt="Codeforces Stats" className="w-full h-64 object-contain" />
+                  <a
+                    href={`https://codeforces.com/profile/${username}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block mt-2 bg-green-500 hover:bg-green-600 text-white text-center py-2 rounded-md"
+                  >
+                    View Codeforces
+                  </a>
+                </div>
+              )}
+              {codechefData && (
+                <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-4 text-white hover:scale-105 transition duration-300">
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={codechefData.profile}
+                      alt="Profile"
+                      className="w-16 h-16 rounded-full border-2 border-orange-400"
+                    />
+                    <div>
+                      <h3 className="text-xl font-bold text-amber-500">CodeChef</h3>
+                      <p className="text-md font-semibold">{codechefData.name}</p>
+                      <p>⭐ {codechefData.stars} Rating: {codechefData.currentRating}</p>
+                      <p>📈 Highest: {codechefData.highestRating}</p>
+                      <p>🌍 Global: {codechefData.globalRank}</p>
+                      <p>🏆 Country: {codechefData.countryRank}</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center mt-3">
+                    <div className="flex items-center space-x-2">
+                      <img
+                        src={codechefData.countryFlag}
+                        alt="Flag"
+                        className="w-6 h-4"
+                      />
+                      <span className="text-sm">{codechefData.countryName}</span>
+                    </div>
+                    <a
+                      href={`https://www.codechef.com/users/${username}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block bg-green-500 hover:bg-green-600 text-white text-center py-2 px-4 rounded-md"
+                    >
+                      View CodeChef
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* Bottom: LeetCode */}
+            {leetCodeImageUrl && (
+              <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-4 hover:scale-105 transition duration-300">
+                <img src={leetCodeImageUrl} alt="LeetCode Stats" className="w-full" />
                 <a
-                  href={`https://codeforces.com/profile/${username}`}
+                  href={`https://leetcode.com/${username}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block mt-2 bg-green-500 hover:bg-green-600 text-white text-center py-2 rounded-md"
                 >
-                  View Codeforces
+                  View LeetCode
                 </a>
               </div>
             )}
-            {codechefData && (
-              <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-4 text-white hover:scale-105 transition duration-300">
-                <div className="flex items-center space-x-4">
-                  <img src={codechefData.profile} alt="Profile" className="w-16 h-16 rounded-full border-2 border-orange-400" />
-                  <div>
-                    <h3 className="text-xl font-bold text-amber-500">CodeChef</h3>
-                    <p className="text-md font-semibold">{codechefData.name}</p>
-                    <p>⭐ {codechefData.stars} Rating: {codechefData.currentRating}</p>
-                    <p>📈 Highest: {codechefData.highestRating}</p>
-                    <p>🌍 Global: {codechefData.globalRank}</p>
-                    <p>🏆 Country: {codechefData.countryRank}</p>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center mt-3">
-                  <div className="flex items-center space-x-2">
-                    <img src={codechefData.countryFlag} alt="Flag" className="w-6 h-4" />
-                    <span className="text-sm">{codechefData.countryName}</span>
-                  </div>
-                 <a
-                  href={`https://www.codechef.com/users/${username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block mt-2 bg-green-500 hover:bg-green-600 text-white text-center py-2 rounded-md"
-                  >
-                  View Codechef
-                  </a>
-
-                </div>
-              </div>
-            )}
           </div>
-          {leetCodeImageUrl && (
-            <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-3 hover:scale-105 transition duration-300">
-              <img src={leetCodeImageUrl} alt="LeetCode Stats" className="w-full h-72 object-contain" />
-              <a
-                href={`https://leetcode.com/${username}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block mt-2 bg-yellow-500 hover:bg-yellow-600 text-white text-center py-2 rounded-md"
-              >
-                View LeetCode
-              </a>
-            </div>
-          )}
         </div>
       </div>
     </div>
