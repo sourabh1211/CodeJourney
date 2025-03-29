@@ -69,24 +69,29 @@ const Profile = () => {
     setLoading((prev) => ({ ...prev, codechef: false }));
   };
 
-  const fetchGfgStats = async () => {
-    if (!username) return showError("Please enter a GFG username");
-    setLoading((prev) => ({ ...prev, gfg: true }));
-    try {
-      const res = await fetch(`https://geeks-for-geeks-api.vercel.app/${username}`);
-      const data = await res.json();
-      if (data.info && data.info.userName) {
-        setGfgData(data);
-        updateTimestamp();
-        setError("");
-      } else {
-        showError("GFG username not found.");
-      }
-    } catch {
-      showError("Failed to fetch GFG stats.");
+ const fetchGfgStats = async () => {
+  if (!username) return showError("Please enter a GFG username");
+  setLoading((prev) => ({ ...prev, gfg: true }));
+  try {
+    const res = await fetch(`https://geeks-for-geeks-api.vercel.app/${username}`);
+    const data = await res.json();
+
+    console.log("GFG API response:", data); // 👈 Add this line to debug
+
+    if (data.info && data.info.userName) {
+      setGfgData(data);
+      updateTimestamp();
+      setError("");
+    } else {
+      showError("GFG username not found.");
     }
-    setLoading((prev) => ({ ...prev, gfg: false }));
-  };
+  } catch (err) {
+    console.error("Error fetching GFG:", err); // 👈 Also log error
+    showError("Failed to fetch GFG stats.");
+  }
+  setLoading((prev) => ({ ...prev, gfg: false }));
+};
+
 
   const toggleTheme = () => {
     setDarkMode(!darkMode);
