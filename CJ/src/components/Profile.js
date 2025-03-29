@@ -70,23 +70,28 @@ const Profile = () => {
   };
 
   const fetchGfgStats = async () => {
-    if (!username) return showError("Please enter a GFG username");
-    setLoading((prev) => ({ ...prev, gfg: true }));
-    try {
-      const res = await fetch(`https://gfg-profile-api.vercel.app/api/${username}`);
-      const data = await res.json();
-      if (data.name) {
-        setGfgData(data);
-        updateTimestamp();
-        setError("");
-      } else {
-        showError("GFG username not found.");
-      }
-    } catch {
-      showError("Failed to fetch GFG stats.");
+  if (!username) return showError("Please enter a GFG username");
+
+  setLoading((prev) => ({ ...prev, gfg: true }));
+
+  try {
+    const res = await fetch(`https://geeks-for-geeks-api.vercel.app/${username}`);
+    const data = await res.json();
+
+    if (data.info && data.info.userName) {
+      setGfgData(data);
+      updateTimestamp();
+      setError("");
+    } else {
+      showError("GFG username not found.");
     }
-    setLoading((prev) => ({ ...prev, gfg: false }));
-  };
+  } catch {
+    showError("Failed to fetch GFG stats.");
+  }
+
+  setLoading((prev) => ({ ...prev, gfg: false }));
+};
+
 
   const toggleTheme = () => {
     setDarkMode(!darkMode);
@@ -228,24 +233,36 @@ const Profile = () => {
             </div>
           )}
           {gfgData && (
-            <div className="rounded-xl p-4 border bg-gradient-to-br from-green-200 to-green-400 text-black shadow-lg hover:scale-105 transition duration-300">
-              <h2 className="text-xl font-bold mb-2">GFG Profile</h2>
-              <p><strong>Name:</strong> {gfgData.name}</p>
-              <p><strong>Rank:</strong> {gfgData.rank}</p>
-              <p><strong>Score:</strong> {gfgData.score}</p>
-              <p><strong>Institute:</strong> {gfgData.institute}</p>
-              <a
-                href={`https://auth.geeksforgeeks.org/user/${username}/`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full transition-transform duration-300 hover:scale-105"
-              >
-                View Profile
-              </a>
-            </div>
-          )}
-        </div>
-      )}
+  <div className="rounded-xl p-4 border bg-gradient-to-br from-green-200 to-green-400 text-black shadow-lg hover:scale-105 transition duration-300">
+    <h2 className="text-xl font-bold mb-4">GFG Profile</h2>
+    <div className="flex items-center mb-4">
+      <img
+        src={gfgData.info.profilePicture}
+        alt="GFG Profile"
+        className="h-16 w-16 rounded-full border-2 border-green-600 mr-4"
+      />
+      <div>
+        <p className="text-lg font-semibold">{gfgData.info.fullName}</p>
+        <p className="text-sm text-gray-800">{gfgData.info.institute}</p>
+      </div>
+    </div>
+    <p><strong>Username:</strong> {gfgData.info.userName}</p>
+    <p><strong>Institute Rank:</strong> {gfgData.info.instituteRank}</p>
+    <p><strong>Current Streak:</strong> {gfgData.info.currentStreak}</p>
+    <p><strong>Max Streak:</strong> {gfgData.info.maxStreak}</p>
+    <p><strong>Coding Score:</strong> {gfgData.info.codingScore}</p>
+    <p><strong>Monthly Score:</strong> {gfgData.info.monthlyScore}</p>
+    <p><strong>Total Problems Solved:</strong> {gfgData.info.totalProblemsSolved}</p>
+    <a
+      href={`https://auth.geeksforgeeks.org/user/${gfgData.info.userName}/`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-block mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full transition-transform duration-300 hover:scale-105"
+    >
+      View Profile
+    </a>
+  </div>
+)}
     </div>
   );
 };
