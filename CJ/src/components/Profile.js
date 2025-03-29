@@ -73,7 +73,7 @@ const Profile = () => {
     if (!username) return showError("Please enter a GFG username");
     setLoading((prev) => ({ ...prev, gfg: true }));
     try {
-      const res = await fetch(`https://gfg-profile-api.vercel.app/api/gfg?username=${username}`);
+      const res = await fetch(`https://gfg-profile-api.vercel.app/api/${username}`);
       const data = await res.json();
       if (data.name) {
         setGfgData(data);
