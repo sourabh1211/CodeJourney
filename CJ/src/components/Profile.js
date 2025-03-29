@@ -1,5 +1,5 @@
-
 import React, { useState } from "react";
+
 const Profile = () => {
   const [username, setUsername] = useState("");
   const [leetCodeImageUrl, setLeetCodeImageUrl] = useState("");
@@ -80,15 +80,16 @@ const Profile = () => {
 
   return (
     <div
-      className={`min-h-screen p-6 ${
+      className={`min-h-screen w-full overflow-x-hidden flex ${
         darkMode
           ? "bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white"
           : "bg-gradient-to-br from-gray-100 via-white to-gray-200 text-black"
-      } flex flex-col items-center`}
+      }`}
     >
-      <div className="flex justify-between items-center w-full max-w-3xl mb-10">
+      {/* LEFT NAV SECTION */}
+      <div className="w-full sm:w-2/5 lg:w-2/5 p-6 flex flex-col items-center gap-10">
         <h1
-          className={`text-4xl sm:text-5xl font-extrabold ${
+          className={`text-4xl font-extrabold text-center ${
             darkMode
               ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 drop-shadow-lg"
               : "text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-yellow-500 drop-shadow-md"
@@ -96,29 +97,27 @@ const Profile = () => {
         >
           CodeJourney 🚀
         </h1>
+
         <button
-          className="text-black bg-yellow-400 hover:bg-yellow-300 px-4 py-2 rounded-full text-sm font-semibold shadow transition-transform duration-300 hover:scale-105"
+          className={`px-5 py-2 rounded-full font-semibold shadow transition-transform duration-300 hover:scale-105 ${
+            darkMode
+              ? "bg-blue-500 hover:bg-blue-600 text-white"
+              : "bg-yellow-400 hover:bg-yellow-300 text-black"
+          }`}
           onClick={toggleTheme}
         >
           {darkMode ? "🌞 Light Mode" : "🌙 Dark Mode"}
         </button>
-      </div>
 
-      <div
-        className={`${
-          darkMode
-            ? "bg-black bg-opacity-60 border-white/10 text-white"
-            : "bg-white bg-opacity-90 border-black/10 text-black"
-        } backdrop-blur-md p-6 rounded-2xl shadow-xl w-full max-w-2xl text-center border`}
-      >
         <input
           type="text"
           placeholder="Enter Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full p-3 mb-6 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-600"
+          className="w-full p-3 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-600"
         />
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
           <button
             onClick={fetchLeetCodeStats}
             className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105"
@@ -138,87 +137,98 @@ const Profile = () => {
             {loading.codechef ? "Loading..." : "CodeChef"}
           </button>
         </div>
+
         {error && <p className="text-red-500 mt-4">{error}</p>}
         {timestamp && <p className="text-sm mt-2 text-gray-400">Last updated: {timestamp}</p>}
       </div>
 
-      {(leetCodeImageUrl || codeforcesImageUrl || codechefData) && (
-        <div className="w-full max-w-5xl mt-10 grid sm:grid-cols-3 gap-6 text-center">
-          {leetCodeImageUrl && (
-            <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#f59e0b] hover:scale-105 transition duration-300">
-              <img
-                src={leetCodeImageUrl}
-                alt="LeetCode Stats"
-                className="h-full w-full object-contain"
-              />
-              <div className="absolute bottom-4 right-4">
-                <a
-                  href={`https://leetcode.com/${username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-                >
-                  View Profile
-                </a>
-              </div>
+      {/* RIGHT DISPLAY SECTION */}
+      <div className="w-full sm:w-3/5 lg:w-3/5 p-6 grid grid-cols-1 md:grid-cols-2 gap-6 place-items-center">
+        {leetCodeImageUrl && (
+          <div className="col-span-1 md:col-span-2 relative rounded-xl overflow-hidden border bg-black p-2 shadow-lg hover:scale-105 transition duration-300 w-full max-w-[500px]">
+            <img
+              src={leetCodeImageUrl}
+              alt="LeetCode Stats"
+              className="h-full w-full object-contain"
+            />
+            <div className="absolute bottom-4 right-4">
+              <a
+                href={`https://leetcode.com/${username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+              >
+                View Profile
+              </a>
             </div>
-          )}
-          {codeforcesImageUrl && (
-            <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#8b5cf6] hover:scale-105 transition duration-300">
-              <img
-                src={codeforcesImageUrl}
-                alt="Codeforces Stats"
-                className="h-full w-full object-contain"
-              />
-              <div className="absolute bottom-4 right-4">
-                <a
-                  href={`https://codeforces.com/profile/${username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-                >
-                  View Profile
-                </a>
-              </div>
-            </div>
-          )}
-         {codechefData && (
-  <div className="relative min-h-[340px] rounded-xl overflow-hidden border bg-black p-4 text-white shadow-[0_0_25px_#f97316] hover:scale-105 transition duration-300 flex items-center justify-between">
-    <div className="flex items-center space-x-4">
-      <img
-        src={codechefData.profile}
-        alt="Profile"
-        className="w-20 h-20 rounded-full border-2 border-orange-400"
-      />
-      <div className="text-left space-y-2">
-        <h3 className="text-2xl font-bold text-amber-800 text-left">CodeChef Stats</h3>
-        <p className="text-lg font-bold">{codechefData.name}</p>
-        <p className="text-lg">⭐{codechefData.stars} Rating: {codechefData.currentRating}</p>
-        <p className="text-lg">📈 Highest Rating: {codechefData.highestRating}</p>
-        <p className="text-lg">🌍 Global Rank: {codechefData.globalRank}</p>
-        <p className="text-lg">🏆 Country Rank: {codechefData.countryRank}</p>
-        <div className="flex items-center space-x-2">
-          <img src={codechefData.countryFlag} alt="Country Flag" className="w-6 h-4" />
-          <span className="text-sm">{codechefData.countryName}</span>
-        </div>
-      </div>
-    </div>
-    <div className="absolute bottom-4 right-4">
-      <a
-        href={`https://www.codechef.com/users/${username}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-      >
-        View Profile
-      </a>
-    </div>
-  </div>
-)}
+          </div>
+        )}
 
-  </div>
-      )}
+        {codeforcesImageUrl && (
+          <div className="relative rounded-xl overflow-hidden border bg-black p-2 shadow-lg hover:scale-105 transition duration-300 w-full max-w-[500px]">
+            <img
+              src={codeforcesImageUrl}
+              alt="Codeforces Stats"
+              className="h-full w-full object-contain"
+            />
+            <div className="absolute bottom-4 right-4">
+              <a
+                href={`https://codeforces.com/profile/${username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+              >
+                View Profile
+              </a>
+            </div>
+          </div>
+        )}
+
+        {codechefData && (
+          <div className="relative rounded-xl overflow-hidden border bg-black p-4 text-white shadow-lg hover:scale-105 transition duration-300 w-full max-w-[500px] flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              <img
+                src={codechefData.profile}
+                alt="Profile"
+                className="w-20 h-20 rounded-full border-2 border-orange-400"
+              />
+              <div className="text-left">
+                <h3 className="text-xl font-bold">{codechefData.name}</h3>
+                <p className="text-sm text-gray-300">{codechefData.institution}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <p>
+                <strong>Rating:</strong> {codechefData.currentRating}
+              </p>
+              <p>
+                <strong>Stars:</strong> {codechefData.stars}
+              </p>
+              <p>
+                <strong>Max Rating:</strong> {codechefData.highestRating}
+              </p>
+              <p>
+                <strong>Global Rank:</strong> {codechefData.globalRank}
+              </p>
+              <p>
+                <strong>Country Rank:</strong> {codechefData.countryRank}
+              </p>
+            </div>
+            <div className="self-end">
+              <a
+                href={`https://www.codechef.com/users/${username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+              >
+                View Profile
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
+
 export default Profile;
