@@ -174,20 +174,19 @@ const Profile = () => {
                     <img src={codechefData.countryFlag} alt="Flag" className="w-6 h-4" />
                     <span className="text-sm">{codechefData.countryName}</span>
                   </div>
-                  <a
-                    href={`https://www.codechef.com/users/${username}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-md"
+                 <a
+                  href={`https://www.codechef.com/users/${username}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block mt-2 bg-green-500 hover:bg-green-600 text-white text-center py-2 rounded-md"
                   >
-                    View Profile
+                  View Codechef
                   </a>
+
                 </div>
               </div>
             )}
           </div>
-
-          {/* Bottom: LeetCode Full Width */}
           {leetCodeImageUrl && (
             <div className="bg-black rounded-xl overflow-hidden border shadow-lg p-3 hover:scale-105 transition duration-300">
               <img src={leetCodeImageUrl} alt="LeetCode Stats" className="w-full h-72 object-contain" />
