@@ -70,28 +70,23 @@ const Profile = () => {
   };
 
   const fetchGfgStats = async () => {
-  if (!username) return showError("Please enter a GFG username");
-
-  setLoading((prev) => ({ ...prev, gfg: true }));
-
-  try {
-    const res = await fetch(`https://geeks-for-geeks-api.vercel.app/${username}`);
-    const data = await res.json();
-
-    if (data.info && data.info.userName) {
-      setGfgData(data);
-      updateTimestamp();
-      setError("");
-    } else {
-      showError("GFG username not found.");
+    if (!username) return showError("Please enter a GFG username");
+    setLoading((prev) => ({ ...prev, gfg: true }));
+    try {
+      const res = await fetch(`https://geeks-for-geeks-api.vercel.app/${username}`);
+      const data = await res.json();
+      if (data.info && data.info.userName) {
+        setGfgData(data);
+        updateTimestamp();
+        setError("");
+      } else {
+        showError("GFG username not found.");
+      }
+    } catch {
+      showError("Failed to fetch GFG stats.");
     }
-  } catch {
-    showError("Failed to fetch GFG stats.");
-  }
-
-  setLoading((prev) => ({ ...prev, gfg: false }));
-};
-
+    setLoading((prev) => ({ ...prev, gfg: false }));
+  };
 
   const toggleTheme = () => {
     setDarkMode(!darkMode);
@@ -178,11 +173,7 @@ const Profile = () => {
         <div className="w-full max-w-5xl mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
           {leetCodeImageUrl && (
             <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#f59e0b] hover:scale-105 transition duration-300">
-              <img
-                src={leetCodeImageUrl}
-                alt="LeetCode Stats"
-                className="h-full w-full object-contain"
-              />
+              <img src={leetCodeImageUrl} alt="LeetCode Stats" className="h-full w-full object-contain" />
               <div className="absolute bottom-4 right-4">
                 <a
                   href={`https://leetcode.com/${username}`}
@@ -197,17 +188,13 @@ const Profile = () => {
           )}
           {codeforcesImageUrl && (
             <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#8b5cf6] hover:scale-105 transition duration-300">
-              <img
-                src={codeforcesImageUrl}
-                alt="Codeforces Stats"
-                className="h-full w-full object-contain"
-              />
+              <img src={codeforcesImageUrl} alt="Codeforces Stats" className="h-full w-full object-contain" />
               <div className="absolute bottom-4 right-4">
                 <a
                   href={`https://codeforces.com/profile/${username}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
                 >
                   View Profile
                 </a>
@@ -215,54 +202,43 @@ const Profile = () => {
             </div>
           )}
           {codechefData && (
-            <div className="rounded-xl p-4 border bg-gradient-to-br from-orange-200 to-red-300 text-black shadow-lg hover:scale-105 transition duration-300">
-              <h2 className="text-xl font-bold mb-2">CodeChef Profile</h2>
+            <div className="rounded-xl border p-4 bg-black text-white shadow-[0_0_25px_#ef4444] hover:scale-105 transition duration-300">
+              <h3 className="text-xl font-semibold mb-2">CodeChef Stats</h3>
               <p><strong>Username:</strong> {codechefData.username}</p>
               <p><strong>Rating:</strong> {codechefData.currentRating}</p>
               <p><strong>Stars:</strong> {codechefData.stars}</p>
+              <p><strong>Highest Rating:</strong> {codechefData.highestRating}</p>
               <p><strong>Global Rank:</strong> {codechefData.globalRank}</p>
               <p><strong>Country Rank:</strong> {codechefData.countryRank}</p>
               <a
                 href={`https://www.codechef.com/users/${username}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-4 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full transition-transform duration-300 hover:scale-105"
+                className="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
               >
                 View Profile
               </a>
             </div>
           )}
           {gfgData && (
-  <div className="rounded-xl p-4 border bg-gradient-to-br from-green-200 to-green-400 text-black shadow-lg hover:scale-105 transition duration-300">
-    <h2 className="text-xl font-bold mb-4">GFG Profile</h2>
-    <div className="flex items-center mb-4">
-      <img
-        src={gfgData.info.profilePicture}
-        alt="GFG Profile"
-        className="h-16 w-16 rounded-full border-2 border-green-600 mr-4"
-      />
-      <div>
-        <p className="text-lg font-semibold">{gfgData.info.fullName}</p>
-        <p className="text-sm text-gray-800">{gfgData.info.institute}</p>
-      </div>
-    </div>
-    <p><strong>Username:</strong> {gfgData.info.userName}</p>
-    <p><strong>Institute Rank:</strong> {gfgData.info.instituteRank}</p>
-    <p><strong>Current Streak:</strong> {gfgData.info.currentStreak}</p>
-    <p><strong>Max Streak:</strong> {gfgData.info.maxStreak}</p>
-    <p><strong>Coding Score:</strong> {gfgData.info.codingScore}</p>
-    <p><strong>Monthly Score:</strong> {gfgData.info.monthlyScore}</p>
-    <p><strong>Total Problems Solved:</strong> {gfgData.info.totalProblemsSolved}</p>
-    <a
-      href={`https://auth.geeksforgeeks.org/user/${gfgData.info.userName}/`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-block mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full transition-transform duration-300 hover:scale-105"
-    >
-      View Profile
-    </a>
-  </div>
-)}
+            <div className="rounded-xl border p-4 bg-black text-white shadow-[0_0_25px_#10b981] hover:scale-105 transition duration-300">
+              <h3 className="text-xl font-semibold mb-2">GFG Stats</h3>
+              <p><strong>Username:</strong> {gfgData.info.userName}</p>
+              <p><strong>Institute Rank:</strong> {gfgData.info.instituteRank}</p>
+              <p><strong>Total Problems Solved:</strong> {gfgData.problemSolved}</p>
+              <p><strong>Overall Coding Score:</strong> {gfgData.info.codingScore}</p>
+              <a
+                href={`https://auth.geeksforgeeks.org/user/${username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+              >
+                View Profile
+              </a>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
