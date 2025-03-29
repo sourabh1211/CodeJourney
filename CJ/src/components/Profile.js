@@ -5,7 +5,8 @@ const Profile = () => {
   const [leetCodeImageUrl, setLeetCodeImageUrl] = useState("");
   const [codeforcesImageUrl, setCodeforcesImageUrl] = useState("");
   const [codechefData, setCodechefData] = useState(null);
-  const [gfgData, setGfgData] = useState(null);
+  const [atcoderImageUrl, setAtcoderImageUrl] = useState("");
+  const [githubImageUrl, setGithubImageUrl] = useState("");
   const [error, setError] = useState("");
   const [timestamp, setTimestamp] = useState("");
   const [darkMode, setDarkMode] = useState(true);
@@ -13,7 +14,8 @@ const Profile = () => {
     leetcode: false,
     codeforces: false,
     codechef: false,
-    gfg: false,
+    atcoder: false,
+    github: false,
   });
 
   const updateTimestamp = () => {
@@ -30,9 +32,7 @@ const Profile = () => {
     if (!username) return showError("Please enter a LeetCode username");
     setLoading((prev) => ({ ...prev, leetcode: true }));
     setLeetCodeImageUrl(
-      `https://leetcard.jacoblin.cool/${username}?theme=${
-        darkMode ? "dark" : "light"
-      }&font=Ubuntu&cache=14400&ext=contest`
+      `https://leetcard.jacoblin.cool/${username}?theme=${darkMode ? "dark" : "light"}&font=Ubuntu&cache=14400&ext=contest`
     );
     updateTimestamp();
     setError("");
@@ -69,194 +69,123 @@ const Profile = () => {
     setLoading((prev) => ({ ...prev, codechef: false }));
   };
 
- const fetchGfgStats = async () => {
-  if (!username) return showError("Please enter a GFG username");
-  setLoading((prev) => ({ ...prev, gfg: true }));
-  try {
-    const res = await fetch(`https://geeks-for-geeks-api.vercel.app/${username}`);
-    const data = await res.json();
+  const fetchAtcoderStats = () => {
+    if (!username) return showError("Please enter an AtCoder username");
+    setLoading((prev) => ({ ...prev, atcoder: true }));
+    setAtcoderImageUrl(`https://atcoder-readme-stats.vercel.app/api?username=${username}`);
+    updateTimestamp();
+    setError("");
+    setTimeout(() => setLoading((prev) => ({ ...prev, atcoder: false })), 1000);
+  };
 
-    console.log("GFG API response:", data); // 👈 Add this line to debug
-
-    if (data.info && data.info.userName) {
-      setGfgData(data);
-      updateTimestamp();
-      setError("");
-    } else {
-      showError("GFG username not found.");
-    }
-  } catch (err) {
-    console.error("Error fetching GFG:", err); // 👈 Also log error
-    showError("Failed to fetch GFG stats.");
-  }
-  setLoading((prev) => ({ ...prev, gfg: false }));
-};
-
+  const fetchGithubStats = () => {
+    if (!username) return showError("Please enter a GitHub username");
+    setLoading((prev) => ({ ...prev, github: true }));
+    setGithubImageUrl(`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=${darkMode ? "dark" : "default"}`);
+    updateTimestamp();
+    setError("");
+    setTimeout(() => setLoading((prev) => ({ ...prev, github: false })), 1000);
+  };
 
   const toggleTheme = () => {
     setDarkMode(!darkMode);
     if (leetCodeImageUrl && username) {
       setLeetCodeImageUrl(
-        `https://leetcard.jacoblin.cool/${username}?theme=${
-          !darkMode ? "dark" : "light"
-        }&font=Ubuntu&cache=14400&ext=contest`
+        `https://leetcard.jacoblin.cool/${username}?theme=${!darkMode ? "dark" : "light"}&font=Ubuntu&cache=14400&ext=contest`
+      );
+    }
+    if (githubImageUrl && username) {
+      setGithubImageUrl(
+        `https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=${!darkMode ? "dark" : "default"}`
       );
     }
   };
 
   return (
-    <div
-      className={`min-h-screen p-6 ${
-        darkMode
-          ? "bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white"
-          : "bg-gradient-to-br from-gray-100 via-white to-gray-200 text-black"
-      } flex flex-col items-center`}
-    >
+    <div className={`min-h-screen p-6 ${darkMode ? "bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white" : "bg-gradient-to-br from-gray-100 via-white to-gray-200 text-black"} flex flex-col items-center`}>
       <div className="flex justify-between items-center w-full max-w-3xl mb-10">
-        <h1
-          className={`text-4xl sm:text-5xl font-extrabold ${
-            darkMode
-              ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 drop-shadow-lg"
-              : "text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-yellow-500 drop-shadow-md"
-          }`}
-        >
+        <h1 className={`text-4xl sm:text-5xl font-extrabold ${darkMode ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 drop-shadow-lg" : "text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-yellow-500 drop-shadow-md"}`}>
           CodeJourney 🚀
         </h1>
-        <button
-          className="text-black bg-yellow-400 hover:bg-yellow-300 px-4 py-2 rounded-full text-sm font-semibold shadow transition-transform duration-300 hover:scale-105"
-          onClick={toggleTheme}
-        >
+        <button onClick={toggleTheme} className="text-black bg-yellow-400 hover:bg-yellow-300 px-4 py-2 rounded-full text-sm font-semibold shadow transition-transform duration-300 hover:scale-105">
           {darkMode ? "🌞 Light Mode" : "🌙 Dark Mode"}
         </button>
       </div>
 
-      <div
-        className={`${
-          darkMode
-            ? "bg-black bg-opacity-60 border-white/10 text-white"
-            : "bg-white bg-opacity-90 border-black/10 text-black"
-        } backdrop-blur-md p-6 rounded-2xl shadow-xl w-full max-w-2xl text-center border`}
-      >
-        <input
-          type="text"
-          placeholder="Enter Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full p-3 mb-6 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-600"
-        />
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <button
-            onClick={fetchLeetCodeStats}
-            className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105"
-          >
+      <div className={`${darkMode ? "bg-black bg-opacity-60 border-white/10 text-white" : "bg-white bg-opacity-90 border-black/10 text-black"} backdrop-blur-md p-6 rounded-2xl shadow-xl w-full max-w-2xl text-center border`}>
+        <input type="text" placeholder="Enter Username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-3 mb-6 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-gray-600" />
+        
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <button onClick={fetchLeetCodeStats} className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105">
             {loading.leetcode ? "Loading..." : "LeetCode"}
           </button>
-          <button
-            onClick={fetchCodeforcesStats}
-            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105"
-          >
+          <button onClick={fetchCodeforcesStats} className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105">
             {loading.codeforces ? "Loading..." : "Codeforces"}
           </button>
-          <button
-            onClick={fetchCodeChefStats}
-            className="bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-300 hover:to-red-400 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105"
-          >
+          <button onClick={fetchCodeChefStats} className="bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-300 hover:to-red-400 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105">
             {loading.codechef ? "Loading..." : "CodeChef"}
           </button>
-          <button
-            onClick={fetchGfgStats}
-            className="bg-gradient-to-r from-green-400 to-green-600 hover:from-green-300 hover:to-green-500 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105"
-          >
-            {loading.gfg ? "Loading..." : "GFG"}
+          <button onClick={fetchAtcoderStats} className="bg-gradient-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105">
+            {loading.atcoder ? "Loading..." : "AtCoder"}
+          </button>
+          <button onClick={fetchGithubStats} className="bg-gradient-to-r from-gray-700 to-black hover:from-gray-600 hover:to-black text-white font-bold py-2 px-4 rounded-full transition-transform duration-300 hover:scale-105">
+            {loading.github ? "Loading..." : "GitHub"}
           </button>
         </div>
+
         {error && <p className="text-red-500 mt-4">{error}</p>}
         {timestamp && <p className="text-sm mt-2 text-gray-400">Last updated: {timestamp}</p>}
       </div>
 
-      {(leetCodeImageUrl || codeforcesImageUrl || codechefData || gfgData) && (
-        <div className="w-full max-w-5xl mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
-          {leetCodeImageUrl && (
-            <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#f59e0b] hover:scale-105 transition duration-300">
-              <img src={leetCodeImageUrl} alt="LeetCode Stats" className="h-full w-full object-contain" />
-              <div className="absolute bottom-4 right-4">
-                <a
-                  href={`https://leetcode.com/${username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-                >
-                  View Profile
-                </a>
-              </div>
+      <div className="w-full max-w-5xl mt-10 grid sm:grid-cols-3 gap-6 text-center">
+        {leetCodeImageUrl && (
+          <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#f59e0b] hover:scale-105 transition duration-300">
+            <img src={leetCodeImageUrl} alt="LeetCode Stats" className="h-full w-full object-contain" />
+            <div className="absolute bottom-4 right-4">
+              <a href={`https://leetcode.com/${username}`} target="_blank" rel="noreferrer" className="text-sm bg-yellow-500 text-black px-2 py-1 rounded hover:bg-yellow-400 transition">Profile</a>
             </div>
-          )}
-          {codeforcesImageUrl && (
-            <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#8b5cf6] hover:scale-105 transition duration-300">
-              <img src={codeforcesImageUrl} alt="Codeforces Stats" className="h-full w-full object-contain" />
-              <div className="absolute bottom-4 right-4">
-                <a
-                  href={`https://codeforces.com/profile/${username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-                >
-                  View Profile
-                </a>
-              </div>
+          </div>
+        )}
+
+        {codeforcesImageUrl && (
+          <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#6366f1] hover:scale-105 transition duration-300">
+            <img src={codeforcesImageUrl} alt="Codeforces Stats" className="h-full w-full object-contain" />
+            <div className="absolute bottom-4 right-4">
+              <a href={`https://codeforces.com/profile/${username}`} target="_blank" rel="noreferrer" className="text-sm bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-400 transition">Profile</a>
             </div>
-          )}
-          {codechefData && (
-            <div className="rounded-xl border p-4 bg-black text-white shadow-[0_0_25px_#ef4444] hover:scale-105 transition duration-300">
-              <h3 className="text-xl font-semibold mb-2">CodeChef Stats</h3>
-              <p><strong>Username:</strong> {codechefData.username}</p>
-              <p><strong>Rating:</strong> {codechefData.currentRating}</p>
-              <p><strong>Stars:</strong> {codechefData.stars}</p>
-              <p><strong>Highest Rating:</strong> {codechefData.highestRating}</p>
-              <p><strong>Global Rank:</strong> {codechefData.globalRank}</p>
-              <p><strong>Country Rank:</strong> {codechefData.countryRank}</p>
-              <a
-                href={`https://www.codechef.com/users/${username}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-              >
-                View Profile
-              </a>
+          </div>
+        )}
+
+        {codechefData && (
+          <div className="bg-gradient-to-r from-orange-200 to-red-100 text-black p-4 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+            <h2 className="text-xl font-semibold mb-2">CodeChef Stats</h2>
+            <p><strong>Name:</strong> {codechefData.name}</p>
+            <p><strong>Rating:</strong> {codechefData.currentRating}</p>
+            <p><strong>Stars:</strong> {codechefData.stars}</p>
+            <p><strong>Global Rank:</strong> {codechefData.globalRank}</p>
+            <p><strong>Country Rank:</strong> {codechefData.countryRank}</p>
+            <a href={`https://www.codechef.com/users/${username}`} target="_blank" rel="noreferrer" className="mt-2 inline-block text-sm bg-orange-500 text-white px-2 py-1 rounded hover:bg-orange-400 transition">Profile</a>
+          </div>
+        )}
+
+        {atcoderImageUrl && (
+          <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-white p-2 shadow-[0_0_25px_#34d399] hover:scale-105 transition duration-300">
+            <img src={atcoderImageUrl} alt="AtCoder Stats" className="h-full w-full object-contain" />
+            <div className="absolute bottom-4 right-4">
+              <a href={`https://atcoder.jp/users/${username}`} target="_blank" rel="noreferrer" className="text-sm bg-emerald-500 text-white px-2 py-1 rounded hover:bg-emerald-400 transition">Profile</a>
             </div>
-          )}
-          {gfgData && (
-  <div className="rounded-xl border p-4 bg-black text-white shadow-[0_0_25px_#10b981] hover:scale-105 transition duration-300">
-    <h3 className="text-xl font-semibold mb-4">GFG Stats</h3>
-    <div className="flex items-center gap-4 mb-4">
-      <img
-        src={gfgData.info.profilePicture}
-        alt="Profile"
-        className="w-16 h-16 rounded-full border-2 border-green-400"
-      />
-      <div>
-        <p className="text-lg font-medium">{gfgData.info.fullName}</p>
-        <p className="text-sm text-gray-300">{gfgData.info.institute}</p>
+          </div>
+        )}
+
+        {githubImageUrl && (
+          <div className="relative min-h-[300px] rounded-xl overflow-hidden border bg-black p-2 shadow-[0_0_25px_#9ca3af] hover:scale-105 transition duration-300">
+            <img src={githubImageUrl} alt="GitHub Stats" className="h-full w-full object-contain" />
+            <div className="absolute bottom-4 right-4">
+              <a href={`https://github.com/${username}`} target="_blank" rel="noreferrer" className="text-sm bg-gray-800 text-white px-2 py-1 rounded hover:bg-gray-600 transition">Profile</a>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-    <p><strong>Username:</strong> {gfgData.info.userName}</p>
-    <p><strong>Institute Rank:</strong> {gfgData.info.instituteRank}</p>
-    <p><strong>Current Streak:</strong> {gfgData.info.currentStreak}</p>
-    <p><strong>Max Streak:</strong> {gfgData.info.maxStreak}</p>
-    <p><strong>Total Problems Solved:</strong> {gfgData.totalProblemsSolved}</p>
-    <p><strong>Overall Coding Score:</strong> {gfgData.info.codingScore}</p>
-    <a
-      href={`https://auth.geeksforgeeks.org/user/${username}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-    >
-      View Profile
-    </a>
-  </div>
-)}
-        </div>
-      )}
     </div>
   );
 };
