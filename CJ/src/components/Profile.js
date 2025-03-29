@@ -221,22 +221,35 @@ const Profile = () => {
             </div>
           )}
           {gfgData && (
-            <div className="rounded-xl border p-4 bg-black text-white shadow-[0_0_25px_#10b981] hover:scale-105 transition duration-300">
-              <h3 className="text-xl font-semibold mb-2">GFG Stats</h3>
-              <p><strong>Username:</strong> {gfgData.info.userName}</p>
-              <p><strong>Institute Rank:</strong> {gfgData.info.instituteRank}</p>
-              <p><strong>Total Problems Solved:</strong> {gfgData.problemSolved}</p>
-              <p><strong>Overall Coding Score:</strong> {gfgData.info.codingScore}</p>
-              <a
-                href={`https://auth.geeksforgeeks.org/user/${username}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
-              >
-                View Profile
-              </a>
-            </div>
-          )}
+  <div className="rounded-xl border p-4 bg-black text-white shadow-[0_0_25px_#10b981] hover:scale-105 transition duration-300">
+    <h3 className="text-xl font-semibold mb-4">GFG Stats</h3>
+    <div className="flex items-center gap-4 mb-4">
+      <img
+        src={gfgData.info.profilePicture}
+        alt="Profile"
+        className="w-16 h-16 rounded-full border-2 border-green-400"
+      />
+      <div>
+        <p className="text-lg font-medium">{gfgData.info.fullName}</p>
+        <p className="text-sm text-gray-300">{gfgData.info.institute}</p>
+      </div>
+    </div>
+    <p><strong>Username:</strong> {gfgData.info.userName}</p>
+    <p><strong>Institute Rank:</strong> {gfgData.info.instituteRank}</p>
+    <p><strong>Current Streak:</strong> {gfgData.info.currentStreak}</p>
+    <p><strong>Max Streak:</strong> {gfgData.info.maxStreak}</p>
+    <p><strong>Total Problems Solved:</strong> {gfgData.totalProblemsSolved}</p>
+    <p><strong>Overall Coding Score:</strong> {gfgData.info.codingScore}</p>
+    <a
+      href={`https://auth.geeksforgeeks.org/user/${username}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform duration-300 hover:scale-105"
+    >
+      View Profile
+    </a>
+  </div>
+)}
         </div>
       )}
     </div>
